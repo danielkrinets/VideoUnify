@@ -1,7 +1,7 @@
 const I18N = {
   en: {
     pick: 'Choose your language', add: 'Choose files', drop: '…or drag video files here',
-    empty: 'No files yet', export: 'Export to MP4', cancel: 'Cancel', working: 'Working…',
+    empty: 'No files yet', export: 'Export to MP4', cancel: 'Cancel', working: 'Working…', left: 'left',
     done: 'Done! The file is saved.', show: 'Show in folder', remove: 'Remove', up: 'Move up',
     down: 'Move down', about: 'About', close: 'Close', big: 'Large text', theme: 'Theme',
     themeAuto: 'Auto', themeLight: 'Light', themeDark: 'Dark', limit: 'Maximum 100 files.',
@@ -20,7 +20,7 @@ const I18N = {
   },
   ru: {
     pick: 'Выберите язык', add: 'Выбрать файлы', drop: '…или перетащите видео сюда',
-    empty: 'Файлов пока нет', export: 'Экспорт в MP4', cancel: 'Отмена', working: 'Идёт работа…',
+    empty: 'Файлов пока нет', export: 'Экспорт в MP4', cancel: 'Отмена', working: 'Идёт работа…', left: 'осталось',
     done: 'Готово! Файл сохранён.', show: 'Показать в папке', remove: 'Убрать', up: 'Выше',
     down: 'Ниже', about: 'О программе', close: 'Закрыть', big: 'Крупный текст', theme: 'Тема',
     themeAuto: 'Авто', themeLight: 'Светлая', themeDark: 'Тёмная', limit: 'Не больше 100 файлов.',
@@ -39,7 +39,7 @@ const I18N = {
   },
   he: {
     pick: 'בחרו שפה', add: 'בחירת קבצים', drop: '…או גררו קבצי וידאו לכאן',
-    empty: 'עדיין אין קבצים', export: 'ייצוא ל‑MP4', cancel: 'ביטול', working: 'מעבד…',
+    empty: 'עדיין אין קבצים', export: 'ייצוא ל‑MP4', cancel: 'ביטול', working: 'מעבד…', left: 'נשאר',
     done: 'הסתיים! הקובץ נשמר.', show: 'הצג בתיקייה', remove: 'הסרה', up: 'למעלה',
     down: 'למטה', about: 'אודות', close: 'סגירה', big: 'טקסט גדול', theme: 'ערכת נושא',
     themeAuto: 'אוטומטי', themeLight: 'בהיר', themeDark: 'כהה', limit: 'עד 100 קבצים.',

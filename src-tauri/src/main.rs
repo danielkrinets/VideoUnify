@@ -37,6 +37,13 @@ struct Item {
 }
 
 // ffmpeg ships next to the app binary (externalBin); fall back to PATH for odd setups.
+// Windows: stop every ffmpeg call from flashing a console window.
+fn quiet(mut c: Command) -> Command {
+    #[cfg(windows)]
+    std::os::windows::process::CommandExt::creation_flags(&mut c, 0x0800_0000);
+    c
+}
+
 fn ffmpeg() -> PathBuf {
     let name = if cfg!(windows) { "ffmpeg.exe" } else { "ffmpeg" };
     std::env::current_exe()
@@ -108,14 +115,14 @@ fn build_args(items: &[Item], script: &str, out: &str) -> Vec<String> {
 
 #[tauri::command]
 async fn probe(path: String) -> Result<Info, String> {
-    let o = Command::new(ffmpeg()).args(["-hide_banner", "-i", &path]).output().map_err(|e| e.to_string())?;
+    let o = quiet(Command::new(ffmpeg())).args(["-hide_banner", "-i", &path]).output().map_err(|e| e.to_string())?;
     parse_info(&String::from_utf8_lossy(&o.stderr)).ok_or_else(|| "unreadable".to_string())
 }
 
 #[tauri::command]
 async fn thumb(path: String) -> String {
     for ss in ["1", "0"] {
-        let o = Command::new(ffmpeg())
+        let o = quiet(Command::new(ffmpeg()))
             .args(["-v", "error", "-ss", ss, "-i", &path, "-frames:v", "1", "-vf", "scale=160:-2", "-f", "image2pipe", "-vcodec", "mjpeg", "-"])
             .output();
         if let Ok(o) = o {
@@ -139,7 +146,7 @@ async fn export(app: tauri::AppHandle, job: State<'_, Job>, items: Vec<Item>, ou
     std::fs::write(&script, build_filter(&items)).map_err(|e| e.to_string())?;
     job.cancelled.store(false, Ordering::SeqCst);
 
-    let mut child = Command::new(ffmpeg())
+    let mut child = quiet(Command::new(ffmpeg()))
         .args(build_args(&items, &script.to_string_lossy(), &out))
         .stdout(Stdio::piped())
         .stderr(Stdio::piped())

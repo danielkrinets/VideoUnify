@@ -5,6 +5,7 @@ const MAX = 100;
 let items = [];
 let busy = false;
 let lastOut = null;
+let t0 = 0;
 
 const store = {
   get: (k, d) => { try { return localStorage.getItem(k) ?? d; } catch { return d; } },
@@ -132,7 +133,7 @@ $('#export').onclick = async () => {
   const d = new Date().toISOString().slice(0, 10);
   const out = await T.dialog.save({ defaultPath: await T.path.join(await T.path.videoDir(), `VideoUnify_${d}.mp4`), filters: [{ name: 'MP4', extensions: ['mp4'] }] });
   if (!out) return;
-  busy = true; lastOut = null;
+  busy = true; lastOut = null; t0 = Date.now();
   say(t('working'));
   $('#prog').value = 0; $('#prog').hidden = false;
   $('#cancel').hidden = false; $('#reveal').hidden = true;
@@ -149,7 +150,12 @@ $('#export').onclick = async () => {
 };
 $('#cancel').onclick = () => invoke('cancel');
 $('#reveal').onclick = () => lastOut && T.opener.revealItemInDir(lastOut);
-T.event.listen('progress', (e) => { $('#prog').value = e.payload; });
+T.event.listen('progress', (e) => {
+  const p = e.payload;
+  $('#prog').value = p;
+  const left = p > 0.02 ? ((Date.now() - t0) / p) * (1 - p) / 1000 : 0;
+  say(t('working') + ' ' + Math.round(p * 100) + '%' + (left ? ' · ' + t('left') + ' ' + fmt(left) : ''));
+});
 
 function setLang(l) { lang = l; store.set('lang', l); applyLang(); }
 $('#lang').onchange = (e) => setLang(e.target.value);
