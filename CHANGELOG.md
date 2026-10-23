@@ -3,6 +3,12 @@
 All notable changes to this project are documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/), versioning: [SemVer](https://semver.org/).
 
+## [0.1.1] - 2026-10-23
+
+### Added
+- Any video format ffmpeg can read is accepted, including old `.vob` (DVD), `.mpg`, `.wmv`, `.3gp`, `.flv`.
+- Anamorphic (non-square pixel) and interlaced sources are corrected on export.
+
 ## [0.1.0] - 2026-10-23
 
 ### Added

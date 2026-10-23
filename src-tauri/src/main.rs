@@ -54,6 +54,13 @@ fn parse_info(text: &str) -> Option<Info> {
     let size = Regex::new(r"[ ,](\d{2,5})x(\d{2,5})[ ,\[]").unwrap().captures(line)?;
     let (mut w, mut h): (u32, u32) = (size[1].parse().ok()?, size[2].parse().ok()?);
     let rot = Regex::new(r"rotation of (-?\d+)").unwrap().captures(text).and_then(|c| c[1].parse::<i32>().ok()).unwrap_or(0);
+    // Anamorphic sources (DVD/VOB, old camcorders) store a non-square pixel shape.
+    if let Some(c) = Regex::new(r"SAR (\d+):(\d+)").unwrap().captures(line) {
+        let (n, d): (f64, f64) = (c[1].parse().unwrap_or(1.0), c[2].parse().unwrap_or(1.0));
+        if n > 0.0 && d > 0.0 {
+            w = (w as f64 * n / d).round() as u32;
+        }
+    }
     if rot.abs() % 180 == 90 {
         std::mem::swap(&mut w, &mut h);
     }
@@ -70,7 +77,7 @@ fn build_filter(items: &[Item]) -> String {
     let mut parts = Vec::new();
     for (i, it) in items.iter().enumerate() {
         parts.push(format!(
-            "[{i}:v]scale={w}:{h}:force_original_aspect_ratio=decrease,pad={w}:{h}:(ow-iw)/2:(oh-ih)/2,setsar=1,fps=30,format=yuv420p[v{i}]"
+            "[{i}:v]yadif=deint=interlaced,scale=trunc(iw*sar/2)*2:ih,setsar=1,scale={w}:{h}:force_original_aspect_ratio=decrease,pad={w}:{h}:(ow-iw)/2:(oh-ih)/2,setsar=1,fps=30,format=yuv420p[v{i}]"
         ));
         parts.push(if it.has_audio {
             format!("[{i}:a]aresample=48000,aformat=sample_fmts=fltp:channel_layouts=stereo[a{i}]")
@@ -204,6 +211,12 @@ mod tests {
         assert!(f.contains("scale=1920:1080"));
         assert!(f.contains("anullsrc=r=48000:cl=stereo,atrim=duration=3[a1]"));
         assert!(f.contains("concat=n=2:v=1:a=1[v][a]"));
+    }
+
+    #[test]
+    fn anamorphic_sar_widens_frame() {
+        let t = "  Duration: 00:00:03.00, x\n  Stream #0:0: Video: mpeg2video (Main), yuv420p(tv), 720x480 [SAR 32:27 DAR 16:9], 29.97 fps\n";
+        assert_eq!(parse_info(t).unwrap().w, 853);
     }
 
     #[test]

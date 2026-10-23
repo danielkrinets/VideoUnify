@@ -2,7 +2,6 @@ const $ = (s) => document.querySelector(s);
 const T = window.__TAURI__;
 const invoke = T.core.invoke;
 const MAX = 100;
-const VIDEO_RE = /\.(mp4|mov|m4v|avi|mkv)$/i;
 let items = [];
 let busy = false;
 let lastOut = null;
@@ -102,7 +101,7 @@ function render() {
 
 async function addFiles(paths) {
   const known = new Set(items.map((i) => i.path));
-  const fresh = paths.filter((p) => VIDEO_RE.test(p) && !known.has(p));
+  const fresh = paths.filter((p) => !known.has(p));
   if (items.length + fresh.length > MAX) say(t('limit'), true); else say('');
   const room = fresh.slice(0, MAX - items.length);
   const added = await Promise.all(room.map(async (p) => {
@@ -115,7 +114,7 @@ async function addFiles(paths) {
 }
 
 $('#add').onclick = async () => {
-  const picked = await T.dialog.open({ multiple: true, filters: [{ name: 'Video', extensions: ['mp4', 'mov', 'm4v', 'avi', 'mkv'] }] });
+  const picked = await T.dialog.open({ multiple: true });
   if (picked) addFiles(picked);
 };
 $('#sort').onclick = () => { items = Logic.sortByNumber(items, (x) => x.path); render(); };
