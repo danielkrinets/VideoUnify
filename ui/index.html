@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>VideoUnify</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>VideoUnify</h1>
+    <div class="tools">
+      <select id="lang" aria-label="Language">
+        <option value="he">עברית</option>
+        <option value="ru">Русский</option>
+        <option value="en">English</option>
+      </select>
+      <select id="theme" aria-label="Theme">
+        <option value="auto" data-i="themeAuto"></option>
+        <option value="light" data-i="themeLight"></option>
+        <option value="dark" data-i="themeDark"></option>
+      </select>
+      <label class="check"><input type="checkbox" id="big"><span data-i="big"></span></label>
+      <button id="aboutBtn" class="ghost" data-i="about"></button>
+    </div>
+  </header>
+
+  <main>
+    <div id="zone" class="zone">
+      <button id="add" class="primary" data-i="add"></button>
+      <p data-i="drop"></p>
+    </div>
+
+    <div class="bar">
+      <strong id="count"></strong>
+      <button id="sort" class="ghost" data-i="auto"></button>
+    </div>
+
+    <ol id="list"></ol>
+    <p id="empty" class="muted" data-i="empty"></p>
+
+    <p id="msg" role="status"></p>
+    <progress id="prog" max="1" value="0" hidden></progress>
+
+    <div class="actions">
+      <button id="export" class="primary big" data-i="export"></button>
+      <button id="cancel" class="ghost big" data-i="cancel" hidden></button>
+      <button id="reveal" class="ghost big" data-i="show" hidden></button>
+    </div>
+  </main>
+
+  <dialog id="langDlg">
+    <h2 data-i="pick"></h2>
+    <div class="langs">
+      <button data-lang="he" class="primary">עברית</button>
+      <button data-lang="ru" class="primary">Русский</button>
+      <button data-lang="en" class="primary">English</button>
+    </div>
+  </dialog>
+
+  <dialog id="aboutDlg">
+    <h2>VideoUnify 0.1.0</h2>
+    <ul id="aboutList"></ul>
+    <p class="muted">MIT · ffmpeg</p>
+    <button id="aboutClose" class="primary" data-i="close"></button>
+  </dialog>
+
+  <script src="logic.js"></script>
+  <script src="i18n.js"></script>
+  <script src="renderer.js"></script>
+</body>
+</html>
