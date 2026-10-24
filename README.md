@@ -22,7 +22,7 @@ English · [Русский](#русский) · [עברית](#עברית)
 - **Private by design** — everything runs on your computer. No cloud, no uploads, no accounts. Files are read from where they already are and never copied.
 - **Smart order** — name files `holiday_1`, `holiday_2`, … `holiday_10` and they line up by number automatically.
 - **Your order** — drag rows or use ↑ / ↓ buttons to change anything.
-- **Up to 100 videos** — MP4, MOV, M4V, AVI, MKV; different sizes and frame rates are fitted automatically (no stretching, black bars if needed). Clips without sound are handled.
+- **Any number of videos** (a warning appears after 100) — MP4, MOV, M4V, AVI, MKV; different sizes and frame rates are fitted automatically (no stretching, black bars if needed). Clips without sound are handled.
 - **3 languages** — English, Русский, עברית (full right-to-left layout), light / dark / auto theme and a large-text mode.
 - **Small and fast** — Rust + Tauri, ~23 MB installer with ffmpeg included.
 
@@ -83,8 +83,8 @@ No network code, no telemetry. Only your language, theme and text-size choices a
 
 ## Русский
 
-**VideoUnify** склеивает до 100 видео в один MP4. Всё работает локально: без облака, без загрузок, файлы читаются из исходных папок и не копируются. Файлы с номерами в названии (`video_1`, `video_2`) выстраиваются автоматически, порядок можно менять перетаскиванием или кнопками ↑ ↓. Интерфейс на русском, иврите и английском, светлая/тёмная тема, крупный текст. Установка: скачайте файл в [Releases](../../releases); при первом запуске на Mac — правый клик → «Открыть».
+**VideoUnify** склеивает видео (после 100 файлов — предупреждение) в один MP4. Всё работает локально: без облака, без загрузок, файлы читаются из исходных папок и не копируются. Файлы с номерами в названии (`video_1`, `video_2`) выстраиваются автоматически, порядок можно менять перетаскиванием или кнопками ↑ ↓. Интерфейс на русском, иврите и английском, светлая/тёмная тема, крупный текст. Установка: скачайте файл в [Releases](../../releases); при первом запуске на Mac — правый клик → «Открыть».
 
 ## עברית
 
-**VideoUnify** מחבר עד 100 סרטונים לקובץ MP4 אחד. הכול פועל במחשב שלך: בלי ענן ובלי העלאות. הקבצים מסודרים אוטומטית לפי המספר בשם הקובץ, ואפשר לשנות את הסדר בגרירה או בלחצני ↑ ↓. הממשק בעברית, רוסית ואנגלית, עם ערכת נושא בהירה/כהה וטקסט גדול. הורדה: [Releases](../../releases).
+**VideoUnify** מחבר סרטונים (אזהרה אחרי 100) לקובץ MP4 אחד. הכול פועל במחשב שלך: בלי ענן ובלי העלאות. הקבצים מסודרים אוטומטית לפי המספר בשם הקובץ, ואפשר לשנות את הסדר בגרירה או בלחצני ↑ ↓. הממשק בעברית, רוסית ואנגלית, עם ערכת נושא בהירה/כהה וטקסט גדול. הורדה: [Releases](../../releases).

@@ -24,6 +24,7 @@ struct Info {
     h: u32,
     has_audio: bool,
     duration: f64,
+    mtime: u64,
 }
 
 #[derive(Deserialize)]
@@ -71,7 +72,7 @@ fn parse_info(text: &str) -> Option<Info> {
     if rot.abs() % 180 == 90 {
         std::mem::swap(&mut w, &mut h);
     }
-    Some(Info { w, h, has_audio: text.contains("Audio:"), duration })
+    Some(Info { w, h, has_audio: text.contains("Audio:"), duration, mtime: 0 })
 }
 
 fn even(n: u32) -> u32 {
@@ -116,7 +117,14 @@ fn build_args(items: &[Item], script: &str, out: &str) -> Vec<String> {
 #[tauri::command]
 async fn probe(path: String) -> Result<Info, String> {
     let o = quiet(Command::new(ffmpeg())).args(["-hide_banner", "-i", &path]).output().map_err(|e| e.to_string())?;
-    parse_info(&String::from_utf8_lossy(&o.stderr)).ok_or_else(|| "unreadable".to_string())
+    let mut info = parse_info(&String::from_utf8_lossy(&o.stderr)).ok_or_else(|| "unreadable".to_string())?;
+    // Modified time (unix seconds) for sort-by-date; 0 when the OS does not provide it.
+    info.mtime = std::fs::metadata(&path)
+        .and_then(|m| m.modified())
+        .ok()
+        .and_then(|t| t.duration_since(std::time::UNIX_EPOCH).ok())
+        .map_or(0, |d| d.as_secs());
+    Ok(info)
 }
 
 #[tauri::command]
@@ -234,7 +242,7 @@ mod tests {
     #[test]
     fn parses_ffmpeg_banner() {
         let t = "  Duration: 00:01:02.50, start: 0.0, bitrate: 900 kb/s\n  Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661), yuv420p, 1920x1080 [SAR 1:1 DAR 16:9], 30 fps\n  Stream #0:1: Audio: aac, 44100 Hz\n";
-        assert_eq!(parse_info(t), Some(Info { w: 1920, h: 1080, has_audio: true, duration: 62.5 }));
+        assert_eq!(parse_info(t), Some(Info { w: 1920, h: 1080, has_audio: true, duration: 62.5, mtime: 0 }));
     }
 
     #[test]

@@ -21,6 +21,7 @@
         <option value="dark" data-i="themeDark"></option>
       </select>
       <label class="check"><input type="checkbox" id="big"><span data-i="big"></span></label>
+      <button id="projBtn" class="ghost" data-i="projects"></button>
       <button id="aboutBtn" class="ghost" data-i="about"></button>
     </div>
   </header>
@@ -33,7 +34,18 @@
 
     <div class="bar">
       <strong id="count"></strong>
-      <button id="sort" class="ghost" data-i="auto"></button>
+      <div class="barBtns">
+        <button id="selAll" class="ghost" data-i="selectAll"></button>
+        <button id="selNone" class="ghost" data-i="deselectAll"></button>
+        <button id="delSel" class="ghost danger" data-i="deleteSel"></button>
+      </div>
+    </div>
+    <div class="bar">
+      <div class="barBtns">
+        <button id="sort" class="ghost" data-i="auto"></button>
+        <button id="byDate" class="ghost" data-i="byDate"></button>
+        <button id="dedupe" class="ghost" data-i="removeCopies"></button>
+      </div>
     </div>
 
     <ol id="list"></ol>
@@ -56,6 +68,17 @@
       <button data-lang="ru" class="primary">Русский</button>
       <button data-lang="en" class="primary">English</button>
     </div>
+  </dialog>
+
+  <dialog id="projDlg">
+    <h2 data-i="projects"></h2>
+    <div class="saveRow">
+      <input id="projName" type="text" maxlength="60" data-ph="projName">
+      <button id="projSave" class="primary" data-i="save"></button>
+    </div>
+    <div id="projList"></div>
+    <p id="projEmpty" class="muted" data-i="noProjects"></p>
+    <button id="projClose" class="primary" data-i="close"></button>
   </dialog>
 
   <dialog id="aboutDlg">

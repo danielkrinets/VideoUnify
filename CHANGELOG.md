@@ -3,6 +3,17 @@
 All notable changes to this project are documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/), versioning: [SemVer](https://semver.org/).
 
+## [0.1.3] - 2026-10-24
+### Added
+- Select all / deselect all and delete selected.
+- Sort by file date.
+- Remove duplicate copies.
+- Projects: save and reopen lists (file paths only).
+### Changed
+- The 100-file limit is now a warning.
+### Fixed
+- Dropping many files at once no longer shows a false error.
+
 ## [0.1.2] - 2026-10-23
 ### Added
 - Percentage and estimated time left while exporting.
