@@ -224,9 +224,9 @@ T.webview.getCurrentWebview().onDragDropEvent((ev) => {
 });
 
 $('#export').onclick = async () => {
-  if (items.length < 2) return say(t('needTwo'), true);
+  if (items.length < 1) return say(t('needTwo'), true);
   const d = new Date().toISOString().slice(0, 10);
-  const out = await T.dialog.save({ defaultPath: await T.path.join(await T.path.videoDir(), `VideoUnify_${d}.mp4`), filters: [{ name: 'MP4', extensions: ['mp4'] }] });
+  const out = await T.dialog.save({ defaultPath: await T.path.join(await T.path.videoDir(), `VideoUnify_${d}.mp4`), filters: [{ name: 'MP4', extensions: ['mp4'] }, { name: 'MKV', extensions: ['mkv'] }, { name: 'MOV', extensions: ['mov'] }] });
   if (!out) return;
   busy = true; lastOut = null; t0 = Date.now();
   say(t('working'));

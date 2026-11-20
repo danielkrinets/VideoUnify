@@ -107,9 +107,13 @@ fn build_args(items: &[Item], script: &str, out: &str) -> Vec<String> {
     }
     for s in [
         "-filter_complex_script", script, "-map", "[v]", "-map", "[a]", "-c:v", "libx264", "-preset", "veryfast", "-crf", "20",
-        "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", "-progress", "pipe:1", "-nostats", out,
+        "-c:a", "aac", "-b:a", "192k", "-progress", "pipe:1", "-nostats", out,
     ] {
         a.push(s.into());
+    }
+    if !out.to_lowercase().ends_with(".mkv") {
+        a.insert(a.len() - 1, "+faststart".into());
+        a.insert(a.len() - 2, "-movflags".into());
     }
     a
 }
@@ -144,8 +148,8 @@ async fn thumb(path: String) -> String {
 
 #[tauri::command]
 async fn export(app: tauri::AppHandle, job: State<'_, Job>, items: Vec<Item>, out: String) -> Result<Value, String> {
-    if items.len() < 2 {
-        return Ok(json!({ "error": "need at least 2 files" }));
+    if items.is_empty() {
+        return Ok(json!({ "error": "no files" }));
     }
     if let Some(m) = items.iter().find(|i| !std::path::Path::new(&i.path).exists()) {
         return Ok(json!({ "missing": m.path.rsplit(['/', '\\']).next().unwrap_or(&m.path) }));
@@ -188,7 +192,8 @@ async fn export(app: tauri::AppHandle, job: State<'_, Job>, items: Vec<Item>, ou
         Some(Ok(s)) if s.success() => Ok(json!({ "ok": true, "out": out })),
         _ => {
             let _ = std::fs::remove_file(&out);
-            let tail: Vec<&str> = err.lines().rev().take(3).collect();
+            // ffmpeg ends with encoder stats; the real cause is the last non-stats lines before them.
+            let tail: Vec<&str> = err.lines().filter(|l| !l.contains("Qavg") && !l.starts_with("kb/s:") && !l.starts_with("frame=")).rev().take(4).collect();
             Ok(json!({ "error": tail.into_iter().rev().collect::<Vec<_>>().join(" ") }))
         }
     }

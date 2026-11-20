@@ -3,6 +3,12 @@
 All notable changes to this project are documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/), versioning: [SemVer](https://semver.org/).
 
+## [0.1.4] - 2026-11-20
+### Added
+- Convert a single file: export works with one video, output MP4, MKV or MOV.
+### Fixed
+- Export errors now show the real ffmpeg message instead of encoder statistics.
+
 ## [0.1.3] - 2026-10-24
 ### Added
 - Select all / deselect all and delete selected.
